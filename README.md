@@ -25,3 +25,7 @@
 
 ### Anti Aim
 - Always Slide Animation
+
+
+
+Credit to imsh3r & Coopyy1 on UC
