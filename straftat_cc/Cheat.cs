@@ -17,7 +17,7 @@ namespace STRAFTAT_CC
         private Vector2 _watermarkPos = new Vector2(10, 10);
 
         private bool _menuOpen = true;
-        private Rect _windowRect = new Rect(100, 100, 1075, 600);
+        private Rect _windowRect = new Rect(100, 100, 1075, 480);
         public Cache Cache { get => _cache; }
         public PlayerMods PlayerMods { get => _playermods; }
         public static Cheat Instance { get; private set; }

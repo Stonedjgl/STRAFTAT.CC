@@ -60,6 +60,7 @@ public class Config
     private GUIStyle _buttonStyle;
     private GUIStyle _toggleStyle;
     private GUIStyle _logStyle;
+    private GUIStyle _panelStyle;
 
     public KeyCode boundKey_aimbot = KeyCode.E;
     public bool waitingForKey = false;
@@ -81,14 +82,14 @@ public class Config
         if (_windowStyle == null)
         {
             _windowStyle = new GUIStyle(GUI.skin.window);
-            _windowStyle.normal.background = MakeTexture(2, 2, new Color(0.1f, 0.1f, 0.1f, 0.95f));
+            _windowStyle.normal.background = MakeTexture(1, 1, new Color(0.1f, 0.1f, 0.1f, 0.95f));
             _windowStyle.normal.textColor = Color.white;
             _windowStyle.fontSize = 14;
             _windowStyle.fontStyle = FontStyle.Bold;
             _headerStyle = new GUIStyle(GUI.skin.button);
             _headerStyle.normal.background = MakeTexture(2, 2, new Color(0.2f, 0.2f, 0.2f, 1));
             _headerStyle.hover.background = MakeTexture(2, 2, new Color(0.25f, 0.25f, 0.25f, 1));
-            _headerStyle.normal.textColor = Color.cyan;
+            _headerStyle.normal.textColor = Color.magenta;
             _headerStyle.fontSize = 12;
             _headerStyle.fontStyle = FontStyle.Bold;
             _headerStyle.alignment = TextAnchor.MiddleLeft;
@@ -118,48 +119,41 @@ public class Config
     public void Draw()
     {
         InitializeStyles();
-        int buttonWidth = 150;
-        int buttonHeight = 50;
+
         int menuWidth = 200;
 
-        // Left-side button panel
-        GUI.Box(new Rect(10, 20, menuWidth, 550), "NIGGALOSE");
+        GUILayout.BeginHorizontal(GUI.skin.box);
 
-        if (GUI.Button(new Rect(30, 50, buttonWidth, buttonHeight), "Aimbot"))
-            currentMenu = "Aimbot";
+        // Linkes Layout (Menü-Buttons)
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(menuWidth));
+        if (GUILayout.Button("Aimbot", _headerStyle)) currentMenu = "Aimbot";
+        if (GUILayout.Button("Visuals", _headerStyle)) currentMenu = "Visuals";
+        if (GUILayout.Button("Exploits", _headerStyle)) currentMenu = "Exploits";
+        if (GUILayout.Button("Misc", _headerStyle)) currentMenu = "Misc";
+        if (GUILayout.Button("AntiAim", _headerStyle)) currentMenu = "AntiAim";
+        GUILayout.EndVertical();
 
-        if (GUI.Button(new Rect(30, 110, buttonWidth, buttonHeight), "Visuals"))
-            currentMenu = "Visuals";
+        // Mittleres Layout (Menü-Inhalt)
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        GUILayout.Label("TAB: " + currentMenu, _headerStyle);
+        GUILayout.Label(GetMenuContent(), _logStyle);
+        GUILayout.EndVertical();
 
-        if (GUI.Button(new Rect(30, 170, buttonWidth, buttonHeight), "Exploits"))
-            currentMenu = "Exploits";
-
-        if (GUI.Button(new Rect(30, 230, buttonWidth, buttonHeight), "Misc"))
-            currentMenu = "Misc";
-        if (GUI.Button(new Rect(30, 290, buttonWidth, buttonHeight), "AntiAim"))
-            currentMenu = "AntiAim";
-
-        // Right-side content panel
-        GUI.Box(new Rect(menuWidth + 30, 20, 400, 550), "TAB: " + currentMenu);
-        GUI.Label(new Rect(menuWidth + 50, 50, 280, 200), GetMenuContent());
-
-        GUI.Box(new Rect(650, 20, 400, 550), "DEBUG LOG");
-
-        // Set up a scrollable area inside the "DEBUG LOG" box
-        _debugScrollPosition = GUI.BeginScrollView(new Rect(660, 50, 380, 450), _debugScrollPosition, new Rect(0, 0, 360, _debugLogs.Count * 20));
-
-        for (int i = 0; i < _debugLogs.Count; i++)
+        // Rechtes Layout (Debug-Log)
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        _debugScrollPosition = GUILayout.BeginScrollView(_debugScrollPosition, GUILayout.Height(400));
+        foreach (string log in _debugLogs)
         {
-            GUI.Label(new Rect(10, i * 20, 360, 20), _debugLogs[i], _logStyle);
+            GUILayout.Label(log, _logStyle);
         }
-
-        GUI.EndScrollView();
-
-        // Clear Logs Button
-        if (GUI.Button(new Rect(660, 510, 380, 30), "Clear Logs"))
+        GUILayout.EndScrollView();
+        if (GUILayout.Button("Clear Logs", _buttonStyle))
         {
             _debugLogs.Clear();
         }
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
     }
 
     string GetMenuContent()
@@ -183,15 +177,20 @@ public class Config
 
     string AimbotContents()
     {
-        if (GUI.Button(new Rect(300, 50, 250, 40), $"Aimbot [{boundKey_aimbot}]: {Aimbot}"))
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        if (GUILayout.Button("Aimbot", _buttonStyle))
             Aimbot = !Aimbot;
-        if (GUI.Button(new Rect(300, 100, 250, 40), $"Enable Auto Shoot: {AutoShoot}"))
-            AutoShoot = !AutoShoot;
-        // Display current keybind
-        GUI.Label(new Rect(300, 150, 250, 40), "Bound Key: " + boundKey_aimbot);
 
+        if (GUILayout.Button("Enable Auto Shoot", _buttonStyle))
+        {
+            AutoShoot = !AutoShoot;
+            AddDebugLog($"Auto Shoot: {AutoShoot}");
+        }
+        // Display current keybind
+        GUILayout.Label("Bound Key: " + boundKey_aimbot);
+        GUILayout.Label("Waiting for Key: " + waitingForKey);
         // Button to change keybind
-        if (GUI.Button(new Rect(300, 200, 250, 40), waitingForKey ? "Press a Key..." : "Change Key"))
+        if (GUILayout.Button("Press Key after Button", _buttonStyle))
         {
             waitingForKey = true;  // Enter input mode
         }
@@ -202,80 +201,118 @@ public class Config
             {
                 boundKey_aimbot = e.keyCode;  // Assign new key
                 waitingForKey = false; // Exit input mode
+                AddDebugLog($"Set Key to: {boundKey_aimbot}");
             }
         }
+        GUILayout.EndVertical();
         return "";
     }
 
     string GetVisualsContent()
     {
         // Visual Toggles
-        if (GUI.Button(new Rect(300, 50, 250, 40), $"Enable ESP: {enableESP}"))
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        if (GUILayout.Button("Enable ESP", _buttonStyle))
             enableESP = !enableESP;
 
-        if (GUI.Button(new Rect(300, 100, 250, 40), $"Enable 3D Box ESP: {enable3DBoxESP}"))
+        if (GUILayout.Button("Enable 3D Box ESP", _buttonStyle))
             enable3DBoxESP = !enable3DBoxESP;
+        GUILayout.EndVertical();
         return "";  // No need to return any text now
     }
 
     string GetExploitsContent()
     {
         // Exploits Toggles
-        if (GUI.Button(new Rect(300, 50, 250, 40), $"Rapid Fire: {RapidFire}"))
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        if (GUILayout.Button("Rapid Fire", _buttonStyle))
+        {
             RapidFire = !RapidFire;
+            AddDebugLog($"Rapid Fire: {RapidFire}");
+        }
 
-        if (GUI.Button(new Rect(300, 100, 250, 40), $"No Spread: {NoSpread}"))
+        if (GUILayout.Button("No Spread", _buttonStyle))
+        { 
             NoSpread = !NoSpread;
+            AddDebugLog($"No Spread: {NoSpread}");
+        }
 
-        if (GUI.Button(new Rect(300, 150, 250, 40), $"Insta Kill: {InstaKill}"))
+        if (GUILayout.Button("Insta Kill", _buttonStyle))
+        {
             InstaKill = !InstaKill;
+            AddDebugLog($"Insta Kill: {InstaKill}");
+        }
 
-        if (GUI.Button(new Rect(300, 200, 250, 40), $"Infinite Ammo: {InfiniteAmmo}"))
+        if (GUILayout.Button("Infinite Ammo", _buttonStyle))
+        {
             InfiniteAmmo = !InfiniteAmmo;
+            AddDebugLog($"Infinite Ammo: {InfiniteAmmo}");
+        }
 
-        if (GUI.Button(new Rect(300, 250, 250, 40), $"WeaponSpeed: {WeaponSpeed}"))
-            WeaponSpeed = !WeaponSpeed;
+        if (GUILayout.Button("Enable Magic Bullet", _buttonStyle))
+        {
+            MagicBullet = !MagicBullet;
+            AddDebugLog($"Magic Bullet: {MagicBullet}");
+        }
 
-        if (GUI.Button(new Rect(300, 250, 250, 40), $"Freeze Enemy [HOST]: {FreezeEnemy}"))
+        if (GUILayout.Button("Enable Godmode [HOST]", _buttonStyle))
+        {
+            GodMode = !GodMode;
+            AddDebugLog($"Godmode: {GodMode}");
+        }
+
+        if (GUILayout.Button("Freeze Enemy [HOST]", _buttonStyle))
+        {
             FreezeEnemy = !FreezeEnemy;
+            AddDebugLog($"Freeze Enemy: {FreezeEnemy}");
+        }
 
+        GUILayout.EndVertical();
         return "";  // No need to return any text now
     }
 
     string GetMiscContent()
     {
-        if (GUI.Button(new Rect(300, 50, 250, 20), $"Infinite Jump: {infiniteJumpEnabled}"))
-            infiniteJumpEnabled = !infiniteJumpEnabled;
-
-        GUI.Label(new Rect(300, 100, 250, 20), "Speed:");
-        speedValue = GUI.HorizontalSlider(new Rect(300, 120, 250, 20), speedValue, 6f, 50f);
-        if (GUI.Button(new Rect(300, 150, 250, 20), $"Enable Speed Hack: {enableSpeedHack}"))
-            enableSpeedHack = !enableSpeedHack;
-
-        GUI.Label(new Rect(300, 180, 250, 20), "Fly [UP / DOWN : Q / E]:");
-        if (GUI.Button(new Rect(300, 200, 250, 20), $"Enable Fly Hack: {FlyMode}"))
-            FlyMode = !FlyMode;
-
-        GUI.Label(new Rect(300, 230, 250, 20), "Godmode [HOST]:");
-        if (GUI.Button(new Rect(300, 250, 250, 20), $"Enable Godmode: {GodMode}"))
-            GodMode = !GodMode;
-
-        GUI.Label(new Rect(300, 280, 250, 20), "Magic Bullet:");
-        if (GUI.Button(new Rect(300, 300, 250, 20), $"Enable Magic Bullet: {MagicBullet}"))
-            MagicBullet = !MagicBullet;
-
-        GUI.Label(new Rect(300, 330, 250, 20), "Teleport to Enemy:");
-        if (GUI.Button(new Rect(300, 350, 250, 20), $"Teleport [Z]"))
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        GUILayout.Label("Weapon Hold Speed", _logStyle);
+        if (GUILayout.Button("WeaponSpeed", _buttonStyle))
         {
+            WeaponSpeed = !WeaponSpeed;
+            AddDebugLog($"Weapon Speed: {WeaponSpeed}");
         }
 
+        GUILayout.Label("Speed", _logStyle);
+        speedValue = GUILayout.HorizontalSlider(speedValue, 6f, 50f);
+        if (GUILayout.Button("Enable Speed Hack", _buttonStyle))
+        {
+            enableSpeedHack = !enableSpeedHack;
+            AddDebugLog($"Speed Hack: {enableSpeedHack}");
+        }
+
+        GUILayout.Label("Fly [UP / DOWN : Q / E]", _logStyle);
+        if (GUILayout.Button("Enable Fly Hack", _buttonStyle))
+        {
+            FlyMode = !FlyMode;
+            AddDebugLog($"Fly Hack: {FlyMode}");
+        }
+
+        GUILayout.Label("Teleport to Enemy:", _logStyle);
+        if (GUILayout.Button("Teleport [Z]", _buttonStyle))
+        {
+            AddDebugLog("Teleported");
+        }
+        GUILayout.EndVertical();
         return "";  // No need to return any text now
     }
 
     string AntiAimMenu()
     {
-        if (GUI.Button(new Rect(300, 50, 250, 20), $"IsSlide: {enableIsSlide}"))
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
+        if (GUILayout.Button("IsSlide", _buttonStyle))
+        {
             enableIsSlide = !enableIsSlide;
+            AddDebugLog($"IsSlide: {enableIsSlide}");
+        }
         /*
         if (GUI.Button(new Rect(250, 100, 250, 20), $"IsGrounded: {enableIsGrounded}"))
             enableIsGrounded = !enableIsGrounded;
@@ -286,6 +323,7 @@ public class Config
         if (GUI.Button(new Rect(250, 250, 250, 20), $"IsLeaning: {enableIsLeaning}"))
             enableIsLeaning = !enableIsLeaning;
         */
+        GUILayout.EndVertical();
         return "";
     }
     public void AddDebugLog(string message)
