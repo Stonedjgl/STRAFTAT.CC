@@ -236,6 +236,9 @@ public class Config
         if (GUI.Button(new Rect(300, 250, 250, 40), $"WeaponSpeed: {WeaponSpeed}"))
             WeaponSpeed = !WeaponSpeed;
 
+        if (GUI.Button(new Rect(300, 250, 250, 40), $"Freeze Enemy [HOST]: {FreezeEnemy}"))
+            FreezeEnemy = !FreezeEnemy;
+
         return "";  // No need to return any text now
     }
 
@@ -249,11 +252,11 @@ public class Config
         if (GUI.Button(new Rect(300, 150, 250, 20), $"Enable Speed Hack: {enableSpeedHack}"))
             enableSpeedHack = !enableSpeedHack;
 
-        GUI.Label(new Rect(300, 180, 250, 20), "Fly:");
+        GUI.Label(new Rect(300, 180, 250, 20), "Fly [UP / DOWN : Q / E]:");
         if (GUI.Button(new Rect(300, 200, 250, 20), $"Enable Fly Hack: {FlyMode}"))
             FlyMode = !FlyMode;
 
-        GUI.Label(new Rect(300, 230, 250, 20), "Godmode:");
+        GUI.Label(new Rect(300, 230, 250, 20), "Godmode [HOST]:");
         if (GUI.Button(new Rect(300, 250, 250, 20), $"Enable Godmode: {GodMode}"))
             GodMode = !GodMode;
 
@@ -262,7 +265,7 @@ public class Config
             MagicBullet = !MagicBullet;
 
         GUI.Label(new Rect(300, 330, 250, 20), "Teleport to Enemy:");
-        if (GUI.Button(new Rect(300, 350, 250, 20), $"Teleport"))
+        if (GUI.Button(new Rect(300, 350, 250, 20), $"Teleport [Z]"))
         {
         }
 

@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using STRAFTSHAT.Features;
-using STRAFTSHAT;
+using STRAFTAT_CC.Features;
+using STRAFTAT_CC;
 
-namespace STRAFTSHAT
+namespace STRAFTAT_CC
 {
     public class Cache
     {

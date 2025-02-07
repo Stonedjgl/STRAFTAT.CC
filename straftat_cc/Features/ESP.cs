@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace STRAFTSHAT.Features
+namespace STRAFTAT_CC.Features
 {
     public class ESP
     {

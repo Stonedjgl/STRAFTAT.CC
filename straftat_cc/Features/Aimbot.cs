@@ -18,9 +18,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using static Mono.Security.X509.X520;
 using DG.Tweening;
-using STRAFTSHAT;
+using STRAFTAT_CC;
 
-namespace STRAFTSHAT.Features
+namespace STRAFTAT_CC.Features
 {
     public class Aimbot
     {

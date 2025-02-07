@@ -4,7 +4,7 @@ using UnityEngine;
 using HarmonyLib;
 using System.Reflection;
 
-namespace STRAFTSHAT.Features
+namespace STRAFTAT_CC.Features
 {
     public class WeaponMods
     {

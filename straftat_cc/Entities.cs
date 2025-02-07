@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace STRAFTSHAT
+namespace STRAFTAT_CC
 {
     public class PlayerCache
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using HeathenEngineering.SteamworksIntegration.API;
 
-namespace STRAFTSHAT.Features
+namespace STRAFTAT_CC.Features
 {
     public class PlayerMods
     {
