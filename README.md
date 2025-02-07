@@ -14,14 +14,16 @@
 - Infinite Ammo
 - No Spread
 - InstaKill
+- Freeze Enemy [HOST]
+- Godmode [HOST]
+- Magic Bullet / Bullet TP
 
 ### Misc
 - Weapon Speed
 - Speed Hack
 - Fly
-- Godmode (WIP)
-- Magic Bullet / Bullet TP
 - Teleport to Enemy (Bind: Z)
+- Unlock Achievments (F5)
 
 ### Anti Aim
 - Always Slide Animation
