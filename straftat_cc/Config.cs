@@ -37,14 +37,14 @@ public class Config
     public bool MagicBullet = false;
     public bool FreezeEnemy = false;
 
-    // Player modifiable values
+    
     public float speedValue = 6f;
     public float jumpSpeedValue = 8f;
     public float jumpHeightValue = 2f;
     public float crouchSpeedValue = 3f;
     public float gravityValue = 20f;
 
-    // Flags to toggle hacks
+    
     public bool enableSpeedHack = false;
     public bool infiniteJumpEnabled = false;
 
@@ -124,7 +124,7 @@ public class Config
 
         GUILayout.BeginHorizontal(GUI.skin.box);
 
-        // Linkes Layout (Menü-Buttons)
+        // left
         GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(menuWidth));
         if (GUILayout.Button("Aimbot", _headerStyle)) currentMenu = "Aimbot";
         if (GUILayout.Button("Visuals", _headerStyle)) currentMenu = "Visuals";
@@ -133,13 +133,13 @@ public class Config
         if (GUILayout.Button("AntiAim", _headerStyle)) currentMenu = "AntiAim";
         GUILayout.EndVertical();
 
-        // Mittleres Layout (Menü-Inhalt)
+        // middle
         GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
         GUILayout.Label("TAB: " + currentMenu, _headerStyle);
         GUILayout.Label(GetMenuContent(), _logStyle);
         GUILayout.EndVertical();
 
-        // Rechtes Layout (Debug-Log)
+        // right (debug box)
         GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
         _debugScrollPosition = GUILayout.BeginScrollView(_debugScrollPosition, GUILayout.Height(400));
         foreach (string log in _debugLogs)
@@ -186,21 +186,21 @@ public class Config
             AutoShoot = !AutoShoot;
             AddDebugLog($"Auto Shoot: {AutoShoot}");
         }
-        // Display current keybind
+        
         GUILayout.Label("Bound Key: " + boundKey_aimbot);
         GUILayout.Label("Waiting for Key: " + waitingForKey);
-        // Button to change keybind
+        
         if (GUILayout.Button("Press Key after Button", _buttonStyle))
         {
-            waitingForKey = true;  // Enter input mode
+            waitingForKey = true;  
         }
         if (waitingForKey)
         {
             Event e = Event.current;
             if (e.isKey)
             {
-                boundKey_aimbot = e.keyCode;  // Assign new key
-                waitingForKey = false; // Exit input mode
+                boundKey_aimbot = e.keyCode;  
+                waitingForKey = false; 
                 AddDebugLog($"Set Key to: {boundKey_aimbot}");
             }
         }
@@ -210,7 +210,7 @@ public class Config
 
     string GetVisualsContent()
     {
-        // Visual Toggles
+        // Visual Toggles : borken
         GUILayout.BeginVertical(GUI.skin.box, GUILayout.Width(400));
         if (GUILayout.Button("Enable ESP", _buttonStyle))
             enableESP = !enableESP;
@@ -218,7 +218,7 @@ public class Config
         if (GUILayout.Button("Enable 3D Box ESP", _buttonStyle))
             enable3DBoxESP = !enable3DBoxESP;
         GUILayout.EndVertical();
-        return "";  // No need to return any text now
+        return "";  
     }
 
     string GetExploitsContent()
@@ -268,7 +268,7 @@ public class Config
         }
 
         GUILayout.EndVertical();
-        return "";  // No need to return any text now
+        return "";  
     }
 
     string GetMiscContent()
@@ -302,7 +302,7 @@ public class Config
             AddDebugLog("Teleported");
         }
         GUILayout.EndVertical();
-        return "";  // No need to return any text now
+        return "";  
     }
 
     string AntiAimMenu()
