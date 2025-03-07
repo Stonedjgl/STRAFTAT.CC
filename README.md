@@ -1,5 +1,8 @@
 # Straftat.cc
 
+![image](https://github.com/user-attachments/assets/dfc4a050-b8ca-4e5d-a7dc-814fde4fa197)
+
+
 ## Features
 ### Aimbot - 360 FOV
 - Enabled
