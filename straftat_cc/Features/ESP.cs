@@ -10,11 +10,18 @@ namespace STRAFTAT_CC.Features
     {
         public static void OnGUI()
         {
-            if (Config.Instance.enable3DBoxESP)
+            if (Config.Instance.enableESP)
             {
+                if (Config.Instance.enable3DBoxESP)
+                {
+                    foreach (var player in Cheat.Instance.Cache.Players)
+                        player.Draw(Cheat.Instance.Cache.MainCamera);
+                }
 
-                foreach (var player in Cheat.Instance.Cache.Players)
-                    player.Draw(Cheat.Instance.Cache.MainCamera);
+                if (Config.Instance.TestEntityEnabled)
+                {
+                    Cheat.Instance.Cache.TestEntity.OnGUI();
+                }
             }
         }
     }
